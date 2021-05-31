@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <script>
+        function computerPlay(){
+            let randomNumber = Math.floor((Math.random() * 3) + 1);
+            if (randomNumber === 1){
+                return "rock";
+            }
+            else if (randomNumber === 2){
+                return "paper";
+            } 
+            else{
+                return "scissors";
+            }
+        }
+        function playGame(){
+            let playerSelection = prompt("Welcome to Rock, Paper, Scissors! What do\
+                you choose?").toLowerCase();
+            while (!(playerSelection === "rock" || playerSelection === "paper" ||
+            playerSelection === "scissors")) {
+                alert("Please Enter A Valid Input (i.e Rock, Paper or \
+                Scissors).");
+                playerSelection = prompt("Welcome to Rock, Paper, Scissors! What do\
+                you choose?").toLowerCase();
+            }
+            const computerSelection = computerPlay();
+            if (playerSelection == computerSelection){
+                return ("Tie! You and the Computer both selected " 
+                + playerSelection + ".");
+            }
+            else if (playerSelection == 'rock'){
+                if (computerSelection == 'paper') {
+                    return playerLoseMessage(playerSelection, computerSelection);
+                }
+                else {
+                    return playerWinMessage(playerSelection, computerSelection);
+                }
+            }
+            else if (playerSelection == 'paper'){
+                if (computerSelection == 'scissors'){
+                   return playerLoseMessage(playerSelection, computerSelection);
+                }
+                else {
+                    return playerWinMessage(playerSelection, computerSelection);
+                }
+            }
+            else if (playerSelection == "scissors"){
+                if (computerSelection == 'rock'){
+                    return playerLoseMessage(playerSelection, computerSelection);
+                }
+                else {
+                    return playerWinMessage(playerSelection, computerSelection);
+                }
+            }
+        }
+
+        function playerWinMessage(playerSelection, computerSelection){
+            return ("You win! The Computer chose " + computerSelection +
+            " and you chose " + playerSelection + ".");
+        }
+
+        function playerLoseMessage(playerSelection, computerSelection) {
+            return("You lose! The Computer chose " + computerSelection +
+            " and you chose " + playerSelection + ".");
+        }
+
+        function game(){
+            for (i=0;i<5;i++){
+                console.log(playGame());
+                alert("Ready for the next game?");
+            }
+        }
+        console.log(game());
+    </script>
+</body>
+</html>
