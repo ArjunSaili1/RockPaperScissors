@@ -7,7 +7,21 @@
     <title>Rock Paper Scissors</title>
 </head>
 <body>
+    <div class='buttons'>
+        <button id='rock' class='playerSelect'>Rock</button>
+        <button id='paper' class='playerSelect'>Paper</button>
+        <button id='scissors' class='playerSelect'>Scissors</button>
+    </div>
     <script>
+        let gameCount = 0;
+        let computerWin = 0;
+        let playerWin = 0;
+        const gameCountDisplay = document.createElement('div');
+        gameCountDisplay.style.position = 'fixed';
+        gameCountDisplay.style.right = "20px";
+        gameCountDisplay.style.top = "10px";
+        document.body.appendChild(gameCountDisplay);
+        const userSelect = document.querySelectorAll(".playerSelect");
         function computerPlay(){
             let randomNumber = Math.floor((Math.random() * 3) + 1);
             if (randomNumber === 1){
@@ -20,64 +34,91 @@
                 return "scissors";
             }
         }
-        function playGame(){
-            let playerSelection = prompt("Welcome to Rock, Paper, Scissors! What do\
-                you choose?").toLowerCase();
-            while (!(playerSelection === "rock" || playerSelection === "paper" ||
-            playerSelection === "scissors")) {
-                alert("Please Enter A Valid Input (i.e Rock, Paper or \
-                Scissors).");
-                playerSelection = prompt("Welcome to Rock, Paper, Scissors! What do\
-                you choose?").toLowerCase();
-            }
+        function playGame(playerSelection){
+            gameCount += 1;
+            let results = document.createElement('div');
+            let container = document.querySelector('.buttons');
             const computerSelection = computerPlay();
-            if (playerSelection == computerSelection){
-                return ("Tie! You and the Computer both selected " 
-                + playerSelection + ".");
+            if (gameCount <= 5){
+                gameCountDisplay.textContent = 'Round: ' + gameCount;
+                if (playerSelection == computerSelection){
+                    results.appendChild(document.createTextNode
+                    ("This round was a tie! You and the Computer both selected " 
+                    + playerSelection + "."));
+                }
+                else if (playerSelection == 'rock'){
+                    if (computerSelection == 'paper') {
+                        results.appendChild(document.createTextNode
+                        (playerLoseMessage(playerSelection, computerSelection)));
+                    }
+                    else {
+                        results.appendChild(document.createTextNode
+                        (playerWinMessage(playerSelection, computerSelection)));
+                    }
+                }
+                else if (playerSelection == 'paper'){
+                    if (computerSelection == 'scissors'){
+                        results.appendChild(document.createTextNode
+                        (playerLoseMessage(playerSelection, computerSelection)));
+                    }
+                    else {
+                        results.appendChild(document.createTextNode
+                        (playerWinMessage(playerSelection, computerSelection)));
+                    }
+                }
+                else if (playerSelection == "scissors"){
+                    if (computerSelection == 'rock'){
+                        results.appendChild(document.createTextNode
+                        (playerLoseMessage(playerSelection, computerSelection)));
+                    }
+                    else {
+                        results.appendChild(document.createTextNode
+                        (playerWinMessage(playerSelection, computerSelection)));
+                    }
+                }
+                container.insertBefore(results, userSelect[0]);
             }
-            else if (playerSelection == 'rock'){
-                if (computerSelection == 'paper') {
-                    return playerLoseMessage(playerSelection, computerSelection);
-                }
-                else {
-                    return playerWinMessage(playerSelection, computerSelection);
-                }
-            }
-            else if (playerSelection == 'paper'){
-                if (computerSelection == 'scissors'){
-                   return playerLoseMessage(playerSelection, computerSelection);
-                }
-                else {
-                    return playerWinMessage(playerSelection, computerSelection);
-                }
-            }
-            else if (playerSelection == "scissors"){
-                if (computerSelection == 'rock'){
-                    return playerLoseMessage(playerSelection, computerSelection);
-                }
-                else {
-                    return playerWinMessage(playerSelection, computerSelection);
-                }
+            if(gameCount == 5){
+                determineWinner(computerWin, playerWin);
             }
         }
-
+            
+        function determineWinner(computerWin, playerWin){
+            const winMessage = document.createElement('div');
+            winMessage.style.position = 'fixed';
+            winMessage.style.right = "20px";
+            winMessage.style.top = "50px";
+            if (computerWin > playerWin){
+                winMessage.textContent = "You lost!\n The computer had a score of " + computerWin +
+                " while you only had a score of " + playerWin;
+            }
+            if(playerWin > computerWin) {
+                winMessage.textContent = "You Win!\n Your score was " + playerWin +
+                " while the computer score was " + computerWin;
+            }
+            else {
+                winMessage.textContent = "Tied! You and the Computer both scored " + computerWin
+                + " points.";
+            }
+            document.body.appendChild(winMessage);
+        }
         function playerWinMessage(playerSelection, computerSelection){
-            return ("You win! The Computer chose " + computerSelection +
+            playerWin += 1;
+            return("You win this round! The Computer chose " + computerSelection +
             " and you chose " + playerSelection + ".");
         }
 
         function playerLoseMessage(playerSelection, computerSelection) {
-            return("You lose! The Computer chose " + computerSelection +
+            computerWin += 1;
+            return("You lose this round! The Computer chose " + computerSelection +
             " and you chose " + playerSelection + ".");
         }
 
-        function game(){
-            for (i=0;i<5;i++){
-                console.log(playGame());
-                alert("Ready for the next game?");
-            }
+        function game(){        
+            userSelect.forEach(select => select.addEventListener("click",
+            function() {playGame(select.id)}));
         }
-        game();
+            game();
     </script>
 </body>
 </html>
